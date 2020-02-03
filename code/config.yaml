@@ -1,0 +1,59 @@
+lib:
+  path2junno : '/home/clement/Documents/Code/JuNNo/lib/'
+
+extern:
+  gpu : 0 # By default, the gpu is represented by number 0. In case of multiples GPU, you can put a list [0,1,...,N]
+  visdom_port : 8097 # Go to http://localhost:8097/ to see validation results/plots during training (visdom is a visualization library)
+  apex : True # Recent technique for 16-bits replacement of tensor (instead of 32 bits). See doc in code.
+
+data:
+  n_classes : 2 # Number of predicted classes, including background
+
+model:
+  input_chan : 3 # Expected nb of channels of the input
+
+  # Architecture details
+  embedding_size : 512
+  output_size : 309
+  dropout : 0.
+  norm : 'none'
+  pooling_step : 4
+  activation : 'selu'
+  upsampling : 'nearest'
+  conv_pad : 1
+
+  n_classes : 2
+  # 4 is the original Unet's depth
+  depth: 4
+  # 6 is the original Unet's value
+  convLayerFactor: 6
+
+hp:
+  seed: 1234
+  n_epochs : 160
+  batch_size: 8
+  initial_lr : 0.0001
+  weight_decay : 0.001
+  save_in_timestamp_folder : True # Will create a subfolder in the savepoint, named based on the current date.
+  save_point : '/home/clement/Documents/Arnaud/models/'
+  validation_frequency : 6 # A validation is launched every validation_frequency mini-batches
+
+######### Gradient #######
+  optim: 'adam'
+  loss: 'ce'
+  classBalance: 'weight'
+  beta1: 0.9
+  beta2: 0.999
+  adam_eps: 0.000000001
+  clip: 5
+  accumulate_gradient: 1
+######### Decay ##########
+  decay_lr: 0.1
+  minimal_lr : 0.0000001
+  lr_patience_decay : 15
+  # If the validation loss hasn't disminished in lr_patience_decay iterations, then the lr will be
+  # reduced by a factor of decay_lr. Cannot go under minimal_lr value.
+
+variant:
+  type : ''
+  code : ''
